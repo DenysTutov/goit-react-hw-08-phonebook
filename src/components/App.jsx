@@ -9,10 +9,6 @@ import { PublicRoute } from 'services/PublicRoute';
 import { getIsFetchingCurrentUser } from 'redux/authUser/authSelectors';
 import authOperations from 'redux/authUser/authOperation';
 
-// import ContactsPage from 'pages/ContactsPage';
-// import LoginPage from 'pages/LoginPage';
-// import RegisterPage from 'pages/RegisterPage';
-
 const ContactsPage = lazy(() => import('pages/ContactsPage'));
 const LoginPage = lazy(() => import('pages/LoginPage'));
 const RegisterPage = lazy(() => import('pages/RegisterPage'));
