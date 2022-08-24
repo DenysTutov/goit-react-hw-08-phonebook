@@ -1,12 +1,12 @@
 import { lazy, Suspense } from 'react';
-import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useEffect } from 'react';
+// import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import SharedLayout from './SharedLayout';
 import { PrivateRoute } from 'services/PrivateRoute';
 import { PublicRoute } from 'services/PublicRoute';
-import { getIsLoggedIn } from 'redux/authUser/authSelectors';
-import { baseApi, useFetchCurrentUserQuery } from 'redux/api';
+// import { getIsLoggedIn } from 'redux/authUser/authSelectors';
+import { useFetchCurrentUserQuery } from 'redux/api';
 
 const ContactsPage = lazy(() => import('pages/ContactsPage'));
 const LoginPage = lazy(() => import('pages/LoginPage'));
