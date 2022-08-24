@@ -22,10 +22,6 @@ export const App = () => {
   const { isFetching, error } = useFetchCurrentUserQuery();
   console.log(error);
 
-  if (error.status === 401) {
-    console.log('yes');
-  }
-
   // useEffect(() => {
   //   if (!isLoggedIn) {
   //     dispatch(baseApi.util.resetApiState());
