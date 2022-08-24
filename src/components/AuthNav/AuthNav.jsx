@@ -1,15 +1,22 @@
 import { NavLink } from 'react-router-dom';
+import styles from './AuthNav.module.scss';
 
 const itemsNav = [
-  { href: 'register', title: 'Registation' },
-  { href: 'login', title: 'LogIn' },
+  { href: 'register', title: 'Sign Up' },
+  { href: 'login', title: 'Sign In' },
 ];
 
 export const AuthNav = () => {
   return (
-    <div>
+    <div className={styles.container}>
       {itemsNav.map(({ href, title }) => (
-        <NavLink to={href} key={href}>
+        <NavLink
+          to={href}
+          key={href}
+          className={({ isActive }) =>
+            isActive ? `${styles.link} ${styles.active}` : `${styles.link}`
+          }
+        >
           {title}
         </NavLink>
       ))}

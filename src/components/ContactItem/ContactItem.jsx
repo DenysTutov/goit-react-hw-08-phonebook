@@ -1,25 +1,61 @@
+import { useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
+//Material UI
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+//Local import
 import { Spinner } from '../Spinner/Spinner';
-import style from './ContactItem.module.scss';
-
-import { useDeleteContactMutation } from '../../redux/contacts/contactsApi';
+import { useDeleteContactMutation } from 'redux/api';
 
 const ContactItem = ({ contact: { id, name, number } }) => {
-  const [deleteContact, { isLoading }] = useDeleteContactMutation();
+  const navigate = useNavigate();
+  const [deleteContact, { isLoading: isLoadingDelete }] =
+    useDeleteContactMutation();
 
   return (
-    <li className={style.item}>
-      <span className={style.itemName}>{name}:</span>
-      <span className={style.itemNumber}>{number}</span>
-      <button
-        type="button"
-        onClick={() => deleteContact(id)}
-        className={style.delete_btn}
-        disabled={isLoading}
+    <>
+      <Box
+        component="li"
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
       >
-        {!isLoading ? 'x' : <Spinner size={20} />}
-      </button>
-    </li>
+        <Typography component="p" variant="span" sx={{ width: '45%' }}>
+          {name}:
+        </Typography>
+
+        <Typography component="p" variant="span" sx={{ textAlign: 'left' }}>
+          {number}
+        </Typography>
+
+        <IconButton
+          aria-label="edit"
+          onClick={() => navigate(`/contacts/edit/${id}`)}
+          sx={{
+            marginLeft: 'auto',
+            '&:hover, &:focus': { bgcolor: '#d7f0d0', color: '#468d46' },
+          }}
+        >
+          <EditIcon />
+        </IconButton>
+
+        <IconButton
+          aria-label="delete"
+          onClick={() => deleteContact(id)}
+          disabled={isLoadingDelete}
+          sx={{
+            marginLeft: '3px',
+            '&:hover, &:focus': { bgcolor: '#f3dacf', color: '#d31616' },
+          }}
+        >
+          {!isLoadingDelete ? <DeleteIcon /> : <Spinner size={20} />}
+        </IconButton>
+      </Box>
+    </>
   );
 };
 

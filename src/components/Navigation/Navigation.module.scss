@@ -1,0 +1,15 @@
+.link {
+  text-decoration: none;
+  color: #000;
+
+  position: relative;
+  overflow: hidden;
+
+  &:not(:last-child) {
+    margin-right: 50px;
+  }
+}
+
+.active {
+  color: #fff;
+}

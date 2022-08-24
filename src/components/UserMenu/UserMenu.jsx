@@ -1,25 +1,50 @@
-import { useDispatch, useSelector } from 'react-redux';
-import authOperations from 'redux/authUser/authOperation';
-import { baseApi } from 'redux/contacts/contactsApi';
+import { useSelector } from 'react-redux';
+import Typography from '@mui/material/Typography';
+import LogoutIcon from '@mui/icons-material/Logout';
+import IconButton from '@mui/material/IconButton';
+
+import Box from '@mui/material/Box';
+
 import { getAuthName } from 'redux/authUser/authSelectors';
+import { useLogOutMutation } from 'redux/api';
 
 export const UserMenu = () => {
-  const dispatch = useDispatch();
   const userName = useSelector(getAuthName);
 
+  const [logOut] = useLogOutMutation();
+
   const handleLogOut = () => {
-    dispatch(authOperations.logOut());
-    dispatch(baseApi.util.resetApiState());
+    logOut();
   };
 
   return (
-    <div>
-      <span>
-        <b>Welcome, {userName}</b>
-      </span>
-      <button type="button" onClick={handleLogOut}>
-        Logout
-      </button>
-    </div>
+    <Box
+      component="div"
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        marginLeft: 'auto',
+      }}
+    >
+      <Typography component="span" sx={{}}>
+        Welcome, {userName}
+      </Typography>
+
+      <IconButton
+        type="button"
+        aria-label="logout"
+        onClick={handleLogOut}
+        sx={{
+          marginLeft: '15px',
+          color: 'black',
+
+          '&:hover': {
+            bgcolor: '#f0b515',
+          },
+        }}
+      >
+        <LogoutIcon />
+      </IconButton>
+    </Box>
   );
 };

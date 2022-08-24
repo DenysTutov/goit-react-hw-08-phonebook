@@ -1,50 +1,89 @@
+//Material UI
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import CssBaseline from '@mui/material/CssBaseline';
+//Local import
 import { useAddContact } from 'hooks/useAddContact';
 import { Spinner } from 'components/Spinner/Spinner';
-import styles from './ContactForm.module.scss';
 
 export const ContactForm = () => {
-  const { name, number, handleAddContact, handleChangeInput, isLoading } =
-    useAddContact();
+  const {
+    name,
+    number,
+    handleAddContact,
+    handleChangeName,
+    handleChangeNumber,
+    isLoading,
+  } = useAddContact();
 
   return (
-    <form onSubmit={handleAddContact} className={styles.form}>
-      <label className={styles.label}>
-        Name
-        <input
-          type="text"
-          name="name"
-          className={styles.input}
-          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-          title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-          required
-          onChange={handleChangeInput}
-          value={name}
-          autoFocus
-        />
-      </label>
-
-      <label className={styles.label}>
-        Number
-        <input
-          type="tel"
-          name="number"
-          className={styles.input}
-          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-          required
-          onChange={handleChangeInput}
-          value={number}
-        />
-      </label>
-
-      <button
-        type="submit"
-        className={styles.submit_btn}
-        disabled={name === ''}
+    <>
+      <Typography
+        component="h1"
+        variant="h4"
+        sx={{
+          textAlign: 'center',
+          marginBottom: 2,
+        }}
       >
-        Add contact
-        {isLoading && <Spinner size={20} />}
-      </button>
-    </form>
+        Phonebook
+      </Typography>
+
+      <Box
+        sx={{
+          padding: 4,
+          bgcolor: '#fff',
+          borderRadius: 4,
+
+          '&:hover': { boxShadow: '0px 0px 42px -20px rgba(0,0,0,0.3)' },
+        }}
+      >
+        <CssBaseline />
+        <Box component="form" noValidate onSubmit={handleAddContact} sx={{}}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="name"
+                label="Name"
+                name="name"
+                variant="standard"
+                onChange={handleChangeName}
+                value={name}
+                pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+              />
+            </Grid>
+
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="number"
+                label="Number"
+                name="number"
+                variant="standard"
+                onChange={handleChangeNumber}
+                value={number}
+                pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+              />
+            </Grid>
+          </Grid>
+
+          <Button
+            type="submit"
+            disabled={name.length < 3}
+            fullWidth
+            variant="contained"
+            sx={{ mt: 3 }}
+          >
+            Add contact {isLoading && <Spinner size={20} />}
+          </Button>
+        </Box>
+      </Box>
+    </>
   );
 };

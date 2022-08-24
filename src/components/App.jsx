@@ -3,69 +3,88 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import SharedLayout from './SharedLayout';
-import styles from './App.module.scss';
 import { PrivateRoute } from 'services/PrivateRoute';
 import { PublicRoute } from 'services/PublicRoute';
-import { getIsFetchingCurrentUser } from 'redux/authUser/authSelectors';
-import authOperations from 'redux/authUser/authOperation';
+import { getIsLoggedIn } from 'redux/authUser/authSelectors';
+import { baseApi, useFetchCurrentUserQuery } from 'redux/api';
 
 const ContactsPage = lazy(() => import('pages/ContactsPage'));
 const LoginPage = lazy(() => import('pages/LoginPage'));
 const RegisterPage = lazy(() => import('pages/RegisterPage'));
+const EditContactModal = lazy(() =>
+  import('./EditContactModal/EditContactModal')
+);
 
 export const App = () => {
-  const dispatch = useDispatch();
-  const isFetchingCurrentUser = useSelector(getIsFetchingCurrentUser);
+  // const dispatch = useDispatch();
+  // const isLoggedIn = useSelector(getIsLoggedIn);
 
-  useEffect(() => {
-    dispatch(authOperations.fetchCurrentUser());
-  }, [dispatch]);
+  const { isFetching, error } = useFetchCurrentUserQuery();
+  console.log(error);
 
-  return (
-    !isFetchingCurrentUser && (
-      <div className={styles.container}>
-        <Suspense fallback={<div>Loading...</div>}>
-          <Routes>
-            <Route path="/" element={<SharedLayout />}>
-              <Route
-                index
-                element={
-                  <PublicRoute restricted>
-                    <RegisterPage />
-                  </PublicRoute>
-                }
-              />
+  if (error.status === 401) {
+    console.log('yes');
+  }
 
-              <Route
-                path="register"
-                element={
-                  <PublicRoute restricted>
-                    <RegisterPage />
-                  </PublicRoute>
-                }
-              />
+  // useEffect(() => {
+  //   if (!isLoggedIn) {
+  //     dispatch(baseApi.util.resetApiState());
+  //   }
+  // }, [dispatch, isLoggedIn]);
+  // const isFetching = false;
 
-              <Route
-                path="login"
-                element={
-                  <PublicRoute restricted>
-                    <LoginPage />
-                  </PublicRoute>
-                }
-              />
+  return !isFetching ? (
+    <Suspense fallback={<></>}>
+      <Routes>
+        <Route path="/" element={<SharedLayout />}>
+          <Route
+            index
+            element={
+              <PublicRoute restricted>
+                <RegisterPage />
+              </PublicRoute>
+            }
+          />
 
-              <Route
-                path="contacts"
-                element={
-                  <PrivateRoute>
-                    <ContactsPage />
-                  </PrivateRoute>
-                }
-              />
-            </Route>
-          </Routes>
-        </Suspense>
-      </div>
-    )
+          <Route
+            path="register"
+            element={
+              <PublicRoute restricted>
+                <RegisterPage />
+              </PublicRoute>
+            }
+          />
+
+          <Route
+            path="login"
+            element={
+              <PublicRoute restricted>
+                <LoginPage />
+              </PublicRoute>
+            }
+          />
+
+          <Route
+            path="contacts"
+            element={
+              <PrivateRoute>
+                <ContactsPage />
+              </PrivateRoute>
+            }
+          >
+            <Route
+              path="edit/:contactId"
+              element={
+                <PrivateRoute>
+                  <EditContactModal />
+                </PrivateRoute>
+              }
+            />
+          </Route>
+        </Route>
+      </Routes>
+    </Suspense>
+  ) : (
+    <div>Loading</div>
   );
 };

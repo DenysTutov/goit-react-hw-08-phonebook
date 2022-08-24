@@ -1,52 +1,48 @@
 import { createSlice } from '@reduxjs/toolkit';
-import authOperations from './authOperation';
+import { authApi } from 'redux/api';
 
 const initialState = {
   user: { name: null, email: null },
   token: null,
   isLoggedIn: false,
-  isError: null,
-  isFetchingCurrentUser: false,
 };
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
-  extraReducers: {
-    [authOperations.register.fulfilled]: (state, action) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      state.isLoggedIn = true;
-      state.isError = null;
-    },
 
-    [authOperations.logIn.fulfilled]: (state, action) => {
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      state.isLoggedIn = true;
-      state.isError = null;
-    },
+  extraReducers: builder => {
+    builder.addMatcher(
+      authApi.endpoints.register.matchFulfilled,
+      (state, { payload }) => {
+        state.user = payload.user;
+        state.token = payload.token;
+        state.isLoggedIn = true;
+      }
+    );
 
-    [authOperations.logOut.fulfilled]: state => {
+    builder.addMatcher(
+      authApi.endpoints.logIn.matchFulfilled,
+      (state, { payload }) => {
+        state.user = payload.user;
+        state.token = payload.token;
+        state.isLoggedIn = true;
+      }
+    );
+
+    builder.addMatcher(authApi.endpoints.logOut.matchFulfilled, state => {
       state.user = { name: null, email: null };
       state.token = null;
       state.isLoggedIn = false;
-    },
+    });
 
-    [authOperations.fetchCurrentUser.pending]: state => {
-      state.isFetchingCurrentUser = true;
-    },
-
-    [authOperations.fetchCurrentUser.fulfilled]: (state, action) => {
-      state.user = action.payload;
-      state.isLoggedIn = true;
-      state.isError = null;
-      state.isFetchingCurrentUser = false;
-    },
-    [authOperations.fetchCurrentUser.rejected]: (state, action) => {
-      state.isError = action.payload;
-      state.isFetchingCurrentUser = false;
-    },
+    builder.addMatcher(
+      authApi.endpoints.fetchCurrentUser.matchFulfilled,
+      (state, { payload }) => {
+        state.user = payload;
+        state.isLoggedIn = true;
+      }
+    );
   },
 });
 

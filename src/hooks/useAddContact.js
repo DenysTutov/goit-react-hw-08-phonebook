@@ -1,10 +1,7 @@
 import { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid';
 import { showError, showSuccess } from '../utils/notification';
-import {
-  useAddContactMutation,
-  useGetContactsQuery,
-} from '../redux/contacts/contactsApi';
+import { useAddContactMutation, useGetContactsQuery } from '../redux/api';
+import { normalizedName } from 'services/normalizedName';
 
 export const useAddContact = () => {
   const { data: contacts } = useGetContactsQuery();
@@ -14,22 +11,8 @@ export const useAddContact = () => {
   const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
-  const handleChangeInput = event => {
-    const { name, value } = event.currentTarget;
-
-    switch (name) {
-      case 'name':
-        setName(value);
-        break;
-
-      case 'number':
-        setNumber(value);
-        break;
-
-      default:
-        return;
-    }
-  };
+  const handleChangeName = e => setName(e.currentTarget.value);
+  const handleChangeNumber = e => setNumber(e.currentTarget.value);
 
   const handleAddContact = event => {
     event.preventDefault();
@@ -45,8 +28,7 @@ export const useAddContact = () => {
     }
 
     const newContact = {
-      id: nanoid(),
-      name: name.trim(),
+      name: normalizedName(name),
       number,
     };
 
@@ -71,5 +53,12 @@ export const useAddContact = () => {
     setNumber('');
   };
 
-  return { name, number, handleAddContact, handleChangeInput, isLoading };
+  return {
+    name,
+    number,
+    handleAddContact,
+    handleChangeName,
+    handleChangeNumber,
+    isLoading,
+  };
 };

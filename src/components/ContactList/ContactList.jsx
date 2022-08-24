@@ -1,13 +1,17 @@
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
+//Material UI
+import Box from '@mui/material/Box';
+//Local import
 import ContactItem from '../ContactItem/ContactItem';
 import style from './ContactList.module.scss';
-import { useGetContactsQuery } from 'redux/contacts/contactsApi';
+import { useGetContactsQuery } from 'redux/api';
+import { getFilter } from 'redux/contacts/contactsSelectors';
 
 const ContactList = () => {
-  const { data: contacts, error, isLoading, refetch } = useGetContactsQuery();
+  const { data: contacts, isError, refetch } = useGetContactsQuery();
 
-  const filter = useSelector(state => state.filter.value);
+  const filter = useSelector(getFilter);
 
   const getFilteredContacts = () => {
     const normalizeFilter = filter.toLowerCase().trim();
@@ -24,11 +28,18 @@ const ContactList = () => {
   }, [refetch]);
 
   return (
-    <>
-      {isLoading && <div className={style.list}>Loading...</div>}
-
+    <Box
+      component="ul"
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        rowGap: 1,
+        width: '100%',
+        marginTop: 2,
+      }}
+    >
       {contacts && (
-        <ul className={style.list}>
+        <>
           {visibleContacts.length !== 0 ? (
             visibleContacts.map(contact => {
               return <ContactItem key={contact.id} contact={contact} />;
@@ -36,11 +47,11 @@ const ContactList = () => {
           ) : (
             <li className={style.error}>Not found name</li>
           )}
-        </ul>
+        </>
       )}
 
-      {error && <p>Ups, something was wrong! Reload page, please</p>}
-    </>
+      {isError && <li>Ups, something was wrong! Reload page, please</li>}
+    </Box>
   );
 };
 

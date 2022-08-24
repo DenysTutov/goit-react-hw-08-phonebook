@@ -1,24 +1,35 @@
 import { ToastContainer } from 'react-toastify';
+import { Outlet } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
 import { ContactForm } from '../components/ContactForm/ContactForm';
 import Filter from '../components/Filter/Filter';
 import ContactList from '../components/ContactList/ContactList';
-import style from '../components/App.module.scss';
+
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
 
 const ContactsPage = () => {
   return (
     <>
-      <div>
-        <h1 className={style.title}>Phonebook</h1>
-        <ContactForm />
+      <Container
+        component="main"
+        sx={{
+          paddingTop: 4,
+        }}
+      >
+        <Grid container columnSpacing={{ sm: 5, md: 10 }}>
+          <Grid item xs={12} sm={5}>
+            <ContactForm />
+          </Grid>
 
-        <h2 className={style.title}>Contacts</h2>
-        <div className={style.contact_list_container}>
-          <Filter />
-          <ContactList />
-        </div>
+          <Grid item xs={12} sm={7} sx={{}}>
+            <Filter />
+            <ContactList />
+          </Grid>
+        </Grid>
         <ToastContainer />
-      </div>
+      </Container>
+      <Outlet />
     </>
   );
 };
