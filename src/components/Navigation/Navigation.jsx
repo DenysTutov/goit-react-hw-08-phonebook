@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
+//Local import
 import { getIsLoggedIn } from 'redux/authUser/authSelectors';
 import styles from './Navigation.module.scss';
 

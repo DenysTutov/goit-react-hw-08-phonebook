@@ -5,6 +5,7 @@ const initialState = {
   user: { name: null, email: null },
   token: null,
   isLoggedIn: false,
+  isError: null,
 };
 
 const authSlice = createSlice({
@@ -27,6 +28,14 @@ const authSlice = createSlice({
         state.user = payload.user;
         state.token = payload.token;
         state.isLoggedIn = true;
+      }
+    );
+    builder.addMatcher(
+      authApi.endpoints.logIn.matchRejected,
+      (state, { payload }) => {
+        if (payload.status === 400) {
+          state.isError = true;
+        }
       }
     );
 

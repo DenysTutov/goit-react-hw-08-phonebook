@@ -1,5 +1,5 @@
 import { Link as RouterLink } from 'react-router-dom';
-
+//Material UI
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-
+//Local import
 import { useRegisterMutation } from 'redux/api';
 import { normalizedName } from 'services/normalizedName';
 

@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
+//Material UI
 import Typography from '@mui/material/Typography';
 import LogoutIcon from '@mui/icons-material/Logout';
 import IconButton from '@mui/material/IconButton';
-
 import Box from '@mui/material/Box';
-
+//Local import
 import { getAuthName } from 'redux/authUser/authSelectors';
 import { useLogOutMutation } from 'redux/api';
 

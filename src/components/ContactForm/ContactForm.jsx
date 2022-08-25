@@ -12,11 +12,13 @@ import { Spinner } from 'components/Spinner/Spinner';
 export const ContactForm = () => {
   const {
     name,
-    number,
+    phone,
     handleAddContact,
     handleChangeName,
-    handleChangeNumber,
+    handleChangePhone,
     isLoading,
+    nameError,
+    phoneError,
   } = useAddContact();
 
   return (
@@ -46,6 +48,8 @@ export const ContactForm = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <TextField
+                error={nameError}
+                type="text"
                 required
                 fullWidth
                 id="name"
@@ -54,21 +58,22 @@ export const ContactForm = () => {
                 variant="standard"
                 onChange={handleChangeName}
                 value={name}
-                pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
               />
             </Grid>
 
             <Grid item xs={12}>
               <TextField
+                type="tel"
+                error={phoneError}
                 required
                 fullWidth
                 id="number"
-                label="Number"
+                label="Phone"
                 name="number"
                 variant="standard"
-                onChange={handleChangeNumber}
-                value={number}
-                pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+                onChange={handleChangePhone}
+                value={phone}
+                onKeyPress={e => !/[0-9]/.test(e.key) && e.preventDefault()}
               />
             </Grid>
           </Grid>

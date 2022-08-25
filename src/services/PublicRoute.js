@@ -1,10 +1,10 @@
 import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
-import { getIsLoggedIn } from 'redux/authUser/authSelectors';
+import { Navigate, Outlet } from 'react-router-dom';
+import { getToken } from 'redux/authUser/authSelectors';
 
-export const PublicRoute = ({ children, restricted }) => {
-  const isLoggedIn = useSelector(getIsLoggedIn);
-  const shouldNavigate = isLoggedIn && restricted;
+export const PublicRoute = ({ restricted }) => {
+  const token = useSelector(getToken);
+  const shouldNavigate = token && restricted;
 
-  return shouldNavigate ? <Navigate to="/contacts" /> : children;
+  return shouldNavigate ? <Navigate to="/contacts" /> : <Outlet />;
 };

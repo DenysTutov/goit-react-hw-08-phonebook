@@ -1,24 +1,38 @@
 import { useState, useEffect } from 'react';
-import { showError, showSuccess } from '../utils/notification';
-import { useAddContactMutation, useGetContactsQuery } from '../redux/api';
+import { useParams, useNavigate } from 'react-router-dom';
+//Local import
+import { showError, showSuccess } from 'utils/notification';
+import { useEditContactMutation, useGetContactsQuery } from 'redux/api';
 import { normalizedName } from 'services/normalizedName';
 import { validationPhone } from 'services/validationPhone';
 
-export const useAddContact = () => {
-  const { data: contacts } = useGetContactsQuery();
-  const [addContact, { isError, isLoading, isSuccess }] =
-    useAddContactMutation();
+export const useEditContactModal = () => {
+  const { contactId } = useParams();
+  const navigate = useNavigate();
 
-  const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const { data: contacts } = useGetContactsQuery();
+
+  const prevContact = contacts
+    .filter(({ id }) => id === contactId)
+    .reduce((_, contact) => contact, {});
+
+  const [editContact, { isError, isSuccess }] = useEditContactMutation();
+
+  const [name, setName] = useState(prevContact.name);
+  const [phone, setPhone] = useState(prevContact.number);
   const [nameError, setNameError] = useState(false);
   const [phoneError, setPhoneError] = useState(false);
 
   const handleChangeName = e => setName(e.currentTarget.value);
   const handleChangePhone = e => setPhone(e.currentTarget.value);
 
-  const handleAddContact = event => {
+  const handleEditContact = event => {
     event.preventDefault();
+
+    if (prevContact.name === name && prevContact.number === phone) {
+      navigate('/contacts');
+      return;
+    }
 
     const contactsName = contacts.map(contact => contact.name);
 
@@ -26,7 +40,7 @@ export const useAddContact = () => {
       contactName => contactName.toLowerCase() === name.toLowerCase()
     );
 
-    if (isMatchName) {
+    if (isMatchName && prevContact.name !== name) {
       setNameError(true);
       return showError(`${name} is already in contacts`);
     } else {
@@ -39,20 +53,20 @@ export const useAddContact = () => {
       return setPhoneError(true);
     }
 
-    const newContact = {
+    const newEditContact = {
       name: normalizedName(name),
       number: phone,
     };
 
-    addContact(newContact);
+    editContact({ id: prevContact.id, payload: { ...newEditContact } });
   };
 
   useEffect(() => {
     if (isSuccess) {
-      showSuccess('Contact added');
-      reset();
+      showSuccess('Contact update');
+      navigate('/contacts');
     }
-  }, [isSuccess]);
+  }, [isSuccess, navigate]);
 
   useEffect(() => {
     if (isError) {
@@ -60,21 +74,13 @@ export const useAddContact = () => {
     }
   }, [isError]);
 
-  const reset = () => {
-    setName('');
-    setPhone('');
-    setNameError(false);
-    setPhoneError(false);
-  };
-
   return {
     name,
     phone,
-    handleAddContact,
-    handleChangeName,
-    handleChangePhone,
-    isLoading,
     nameError,
     phoneError,
+    handleChangeName,
+    handleChangePhone,
+    handleEditContact,
   };
 };

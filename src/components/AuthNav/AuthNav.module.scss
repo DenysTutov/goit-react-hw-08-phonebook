@@ -32,12 +32,14 @@
     transform-origin: right;
   }
 
-  &:hover::after {
+  &:hover::after,
+  &:focus::after {
     transform: scaleX(1);
     transform-origin: left;
   }
 
-  &:hover {
+  &:hover,
+  &:focus {
     color: #fff;
   }
 }

@@ -1,12 +1,13 @@
 import { ToastContainer } from 'react-toastify';
 import { Outlet } from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
+//Material UI
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+//Local import
 import { ContactForm } from '../components/ContactForm/ContactForm';
 import Filter from '../components/Filter/Filter';
 import ContactList from '../components/ContactList/ContactList';
-
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
 
 const ContactsPage = () => {
   return (

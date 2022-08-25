@@ -1,4 +1,5 @@
 import { CgSpinner } from 'react-icons/cg';
+//Local import
 import styles from './Spinner.module.scss';
 
 export const Spinner = ({ size }) => {

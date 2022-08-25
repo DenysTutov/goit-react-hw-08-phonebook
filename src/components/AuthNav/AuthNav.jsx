@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+//Local import
 import styles from './AuthNav.module.scss';
 
 const itemsNav = [

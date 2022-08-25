@@ -1,86 +1,49 @@
 import { lazy, Suspense } from 'react';
-// import { useEffect } from 'react';
-// import { useDispatch, useSelector } from 'react-redux';
 import { Routes, Route } from 'react-router-dom';
 import SharedLayout from './SharedLayout';
 import { PrivateRoute } from 'services/PrivateRoute';
 import { PublicRoute } from 'services/PublicRoute';
-// import { getIsLoggedIn } from 'redux/authUser/authSelectors';
 import { useFetchCurrentUserQuery } from 'redux/api';
+import { useSelector } from 'react-redux';
+import { getToken } from 'redux/authUser/authSelectors';
+import { MainSpinner } from './MainSpinner/MainSpinner';
 
+const Home = lazy(() => import('pages/Home'));
 const ContactsPage = lazy(() => import('pages/ContactsPage'));
 const LoginPage = lazy(() => import('pages/LoginPage'));
 const RegisterPage = lazy(() => import('pages/RegisterPage'));
 const EditContactModal = lazy(() =>
   import('./EditContactModal/EditContactModal')
 );
+const NotFoundPage = lazy(() => import('pages/NotFoundPage'));
 
 export const App = () => {
-  // const dispatch = useDispatch();
-  // const isLoggedIn = useSelector(getIsLoggedIn);
+  const token = useSelector(getToken);
 
-  const { isFetching, error } = useFetchCurrentUserQuery();
-  console.log(error);
-
-  // useEffect(() => {
-  //   if (!isLoggedIn) {
-  //     dispatch(baseApi.util.resetApiState());
-  //   }
-  // }, [dispatch, isLoggedIn]);
-  // const isFetching = false;
+  const { isFetching } = useFetchCurrentUserQuery(undefined, { skip: !token });
 
   return !isFetching ? (
     <Suspense fallback={<></>}>
       <Routes>
         <Route path="/" element={<SharedLayout />}>
-          <Route
-            index
-            element={
-              <PublicRoute restricted>
-                <RegisterPage />
-              </PublicRoute>
-            }
-          />
+          <Route index element={<Home />} />
 
-          <Route
-            path="register"
-            element={
-              <PublicRoute restricted>
-                <RegisterPage />
-              </PublicRoute>
-            }
-          />
-
-          <Route
-            path="login"
-            element={
-              <PublicRoute restricted>
-                <LoginPage />
-              </PublicRoute>
-            }
-          />
-
-          <Route
-            path="contacts"
-            element={
-              <PrivateRoute>
-                <ContactsPage />
-              </PrivateRoute>
-            }
-          >
-            <Route
-              path="edit/:contactId"
-              element={
-                <PrivateRoute>
-                  <EditContactModal />
-                </PrivateRoute>
-              }
-            />
+          <Route path="/" element={<PublicRoute restricted />}>
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/login" element={<LoginPage />} />
           </Route>
+
+          <Route path="contacts" element={<PrivateRoute />}>
+            <Route path="/contacts" element={<ContactsPage />}>
+              <Route path="edit/:contactId" element={<EditContactModal />} />
+            </Route>
+          </Route>
+
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </Suspense>
   ) : (
-    <div>Loading</div>
+    <MainSpinner />
   );
 };

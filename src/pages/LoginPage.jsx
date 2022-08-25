@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+//Material UI
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -12,6 +13,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+//Local import
 import { showError } from '../utils/notification';
 import { useLogInMutation } from 'redux/api';
 
@@ -27,12 +29,16 @@ const LoginPage = () => {
       password: data.get('password'),
     };
 
+    if (user.email === '' || user.password === '') {
+      return showError('One of the fields is empty');
+    }
+
     logIn(user);
   };
 
   useEffect(() => {
     if (isError) {
-      showError(`Ups! login or password is invalid`);
+      showError('Ups! Login or password is invalid');
     }
   }, [isError]);
 
@@ -80,7 +86,7 @@ const LoginPage = () => {
             onSubmit={handleSubitLogIn}
             sx={{ mt: 3 }}
           >
-            <Grid container spacing={3}>
+            <Grid container spacing={2}>
               <Grid item xs={12}>
                 <TextField
                   required
