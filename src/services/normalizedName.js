@@ -1,4 +1,6 @@
 export const normalizedName = name => {
+  if (name === '') return '';
+
   return name
     .trim()
     .split(/\s+/)

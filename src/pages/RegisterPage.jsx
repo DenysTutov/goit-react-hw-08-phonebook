@@ -1,4 +1,7 @@
+import { useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 //Material UI
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -13,9 +16,10 @@ import Container from '@mui/material/Container';
 //Local import
 import { useRegisterMutation } from 'redux/api';
 import { normalizedName } from 'services/normalizedName';
+import { showError } from '../utils/notification';
 
 const RegisterPage = () => {
-  const [registration] = useRegisterMutation();
+  const [registration, { isError }] = useRegisterMutation();
 
   const handleSubitRegistration = event => {
     event.preventDefault();
@@ -27,8 +31,22 @@ const RegisterPage = () => {
       password: data.get('password'),
     };
 
+    if (
+      newUser.name === '' ||
+      newUser.email === '' ||
+      newUser.password === ''
+    ) {
+      return showError('One of the fields is empty');
+    }
+
     registration(newUser);
   };
+
+  useEffect(() => {
+    if (isError) {
+      showError('Ups! Something was wrong. Try again');
+    }
+  }, [isError]);
 
   return (
     <Container
@@ -85,6 +103,7 @@ const RegisterPage = () => {
               <Grid item xs={12}>
                 <TextField
                   required
+                  type="email"
                   fullWidth
                   id="email"
                   label="Email Address"
@@ -127,6 +146,7 @@ const RegisterPage = () => {
           </Box>
         </Box>
       </Box>
+      <ToastContainer />
     </Container>
   );
 };
