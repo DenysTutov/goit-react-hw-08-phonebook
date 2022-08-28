@@ -91,6 +91,7 @@ const RegisterPage = () => {
               <Grid item xs={12}>
                 <TextField
                   autoComplete="given-name"
+                  type="text"
                   name="name"
                   required
                   fullWidth

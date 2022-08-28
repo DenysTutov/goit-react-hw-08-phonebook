@@ -70,7 +70,7 @@ const LoginPage = () => {
           <Avatar
             sx={{
               m: 1,
-              bgcolor: 'secondary.main',
+              bgcolor: '#4caf50',
             }}
           >
             <LockOutlinedIcon />
@@ -90,6 +90,7 @@ const LoginPage = () => {
               <Grid item xs={12}>
                 <TextField
                   required
+                  type="email"
                   fullWidth
                   id="email"
                   label="Email Address"

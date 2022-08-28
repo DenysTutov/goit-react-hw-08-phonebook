@@ -50,6 +50,7 @@ const EditContactModal = () => {
             <Grid item xs={12}>
               <TextField
                 required
+                type="text"
                 fullWidth
                 id="name"
                 label="Name"
@@ -64,6 +65,7 @@ const EditContactModal = () => {
             <Grid item xs={12}>
               <TextField
                 required
+                type="tel"
                 fullWidth
                 id="number"
                 label="Number"
