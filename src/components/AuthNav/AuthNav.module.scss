@@ -4,11 +4,15 @@
 
   display: flex;
   justify-content: center;
+  align-items: center;
 }
 
 .link {
+  display: flex;
+
+  align-items: center;
+  height: 20px;
   position: relative;
-  overflow: hidden;
 
   text-decoration: none;
   color: #000;
@@ -20,10 +24,11 @@
   &::after {
     content: '';
     position: absolute;
-    bottom: 0;
+    bottom: -5px;
     left: 0;
+
     display: block;
-    height: 1px;
+    height: 3px;
     width: 100%;
     background-color: #fff;
 
@@ -32,8 +37,7 @@
     transform-origin: right;
   }
 
-  &:hover::after,
-  &:focus::after {
+  &:hover::after {
     transform: scaleX(1);
     transform-origin: left;
   }
